@@ -30,6 +30,7 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const res = await login(data);
+      console.log("*****************",res)
 
       toast.success(res.message);
 
