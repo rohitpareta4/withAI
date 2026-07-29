@@ -22,3 +22,13 @@ export const login=async(data:LoginFormData)=>{
     throw error
    }
 }
+
+export const authme=async()=>{
+   try {
+      const res=await api.get("/auth/authme")
+      return res.data
+   } catch (error) {
+      console.log(error)
+      throw error
+   }
+}
