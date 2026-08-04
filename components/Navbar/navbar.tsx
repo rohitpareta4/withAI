@@ -46,10 +46,10 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-8 md:flex">
           <Link
-            href="/resume"
+            href="/resumes"
             className="text-slate-300 transition hover:text-cyan-400"
           >
-            Resume
+            Saved Resume
           </Link>
 
           <Link

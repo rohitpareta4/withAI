@@ -21,7 +21,7 @@ return(
          <p>{data.personal.summary}</p>
       </ResumeSection>
 
-      <Skillsection Skills={data.skills}/>
+      <Skillsection skills={data.skills}/>
       <Projectsection projects={data.projects}/>
       <ExperienceSection experience={data.experience}/>
 
