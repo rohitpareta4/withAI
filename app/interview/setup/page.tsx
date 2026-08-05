@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { ArrowLeft, Briefcase, Brain, Clock, ListChecks } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { create_interview } from "@/features/interview/services/interview_service";
+// import { createinterviewrequest } from "@/features/interview/types/interview.types";
 
 export default function InterviewSetupPage() {
   const router = useRouter();
@@ -27,12 +29,21 @@ export default function InterviewSetupPage() {
     }));
   };
 
-  const handleGenerate = () => {
-    console.log(formData);
-
-    // Call API here
-    // router.push("/interview/session/1");
+ const handleGenerate = async () => {
+  const data = {
+    ...formData,
+    skills: formData.skills
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean),
+    questionCount: Number(formData.questionCount),
   };
+
+  const res = await create_interview(data);
+  console.log("res................data",res)
+
+  router.push(`/interview/session/${res.interviewId}`);
+};
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
