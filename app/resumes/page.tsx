@@ -20,7 +20,7 @@ export default function Savedresume(){
     // const [resumeData, setResumeData] = useState<any[]>([]);
     const [resumeData, setResumeData] = useState<SavedResume[]>([]);
 
-    const [temp, setTemp] = useState<string | null>(null);
+    // const [temp, setTemp] = useState<string | null>(null);
 
 useEffect(()=>{
   const callIt=async()=>{
@@ -28,7 +28,7 @@ useEffect(()=>{
         const res=await get_resume()
         console.log("saved-----------------resume--------",res)
         setResumeData(res)
-        setTemp(res.template)
+        // setTemp(res.template)
       } catch (error) {
         console.log(error)
       }
