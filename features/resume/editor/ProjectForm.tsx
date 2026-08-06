@@ -11,41 +11,45 @@ export default function ProjectForm({
   projects,
   setResumeData,
 }: Props) {
-  const handleChange = (
-    index: number,
-    field: keyof Project,
-    value: string
-  ) => {
-    setResumeData((prev) => {
-      const updatedProjects = [...prev.projects];
 
-      updatedProjects[index] = {
-        ...updatedProjects[index],
-        [field]: value,
-      };
+  const handleChange = <K extends keyof Project>(
+  index: number,
+  field: K,
+  value: Project[K]
+) => {
+  setResumeData((prev) => {
+    const updatedProjects = [...prev.projects];
 
-      return {
-        ...prev,
-        projects: updatedProjects,
-      };
-    });
-  };
+    updatedProjects[index] = {
+      ...updatedProjects[index],
+      [field]: value,
+    };
 
-  const addProject = () => {
-    setResumeData((prev) => ({
+    return {
       ...prev,
-      projects: [
-        ...prev.projects,
-        {
-          title: "",
-          technologies: "",
-          github: "",
-          live: "",
-          description: "",
-        },
-      ],
-    }));
-  };
+      projects: updatedProjects,
+    };
+  });
+};
+
+const addProject = () => {
+  setResumeData((prev) => ({
+    ...prev,
+    projects: [
+      ...prev.projects,
+      {
+        id: crypto.randomUUID(),
+        title: "",
+        techStack: [],
+        github: "",
+        liveLink: "",
+        startDate: "",
+        endDate: "",
+        description: [],
+      },
+    ],
+  }));
+};
 
   const removeProject = (index: number) => {
     setResumeData((prev) => ({
@@ -103,17 +107,19 @@ export default function ProjectForm({
               />
 
               <Input
-                label="Technologies Used"
-                value={project.technologies}
-                placeholder="Next.js, FastAPI, Tailwind CSS"
-                onChange={(e) =>
-                  handleChange(
-                    index,
-                    "technologies",
-                    e.target.value
-                  )
-                }
-              />
+  label="Technologies Used"
+  value={project.techStack.join(", ")}
+  placeholder="Next.js, FastAPI, Tailwind CSS"
+  onChange={(e) =>
+    handleChange(
+      index,
+      "techStack",
+      e.target.value
+        .split(",")
+        .map((item) => item.trim())
+    )
+  }
+/>
 
               <Input
                 label="GitHub URL"
@@ -130,12 +136,12 @@ export default function ProjectForm({
 
               <Input
                 label="Live Demo URL"
-                value={project.live}
+                value={project.liveLink}
                 placeholder="https://project.vercel.app"
                 onChange={(e) =>
                   handleChange(
                     index,
-                    "live",
+                    "liveLink",
                     e.target.value
                   )
                 }
@@ -145,20 +151,19 @@ export default function ProjectForm({
                 <label className="mb-2 block text-sm font-medium text-slate-300">
                   Description
                 </label>
-
-                <textarea
-                  rows={5}
-                  value={project.description}
-                  onChange={(e) =>
-                    handleChange(
-                      index,
-                      "description",
-                      e.target.value
-                    )
-                  }
-                  placeholder="Describe your project..."
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-cyan-400"
-                />
+<textarea
+  rows={5}
+  value={project.description.join("\n")}
+  onChange={(e) =>
+    handleChange(
+      index,
+      "description",
+      e.target.value
+        .split("\n")
+        .filter((line) => line.trim() !== "")
+    )
+  }
+/>
               </div>
             </div>
           </div>
