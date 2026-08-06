@@ -34,23 +34,25 @@ export default function EducationForm({
     });
   };
 
-  const addEducation = () => {
-    setResumeData((prev) => ({
-      ...prev,
-      education: [
-        ...prev.education,
-        {
-          school: "",
-          degree: "",
-          field: "",
-          startDate: "",
-          endDate: "",
-          cgpa: "",
-          location: "",
-        },
-      ],
-    }));
-  };
+ const addEducation = () => {
+  setResumeData((prev) => ({
+    ...prev,
+    education: [
+      ...prev.education,
+      {
+        id: crypto.randomUUID(),
+        college: "",
+        degree: "",
+        specialization: "",
+        cgpa: "",
+        startDate: "",
+        endDate: "",
+        location: "",
+        description: [],
+      },
+    ],
+  }));
+};
 
   const removeEducation = (index: number) => {
     setResumeData((prev) => ({
@@ -101,9 +103,9 @@ export default function EducationForm({
 
               <Input
                 label="College / School"
-                value={item.school}
+                value={item.college}
                 onChange={(e) =>
-                  handleChange(index, "school", e.target.value)
+                  handleChange(index, "college", e.target.value)
                 }
               />
 
@@ -117,9 +119,9 @@ export default function EducationForm({
 
               <Input
                 label="Field of Study"
-                value={item.field}
+                value={item.specialization}
                 onChange={(e) =>
-                  handleChange(index, "field", e.target.value)
+                  handleChange(index, "specialization", e.target.value)
                 }
               />
 
