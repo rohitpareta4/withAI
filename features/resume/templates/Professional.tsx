@@ -33,7 +33,7 @@ export default function Professional({ data }: Props) {
             </h2>
 
             <p className="mt-1 text-sm tracking-widest text-yellow-400 uppercase">
-              {data.personal.jobtitle}
+              {data.personal.jobTitle}
             </p>
 
           </div>
@@ -123,7 +123,7 @@ export default function Professional({ data }: Props) {
             </h1>
 
             <p className="mt-3 text-xl font-semibold uppercase tracking-[0.3em] text-yellow-600">
-              {data.personal.jobtitle}
+              {data.personal.jobTitle}
             </p>
 
           </div>

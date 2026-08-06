@@ -30,7 +30,7 @@ export default function Modern({ data }: Props) {
             </h2>
 
             <p className="text-cyan-300">
-              {data.personal.jobtitle}
+              {data.personal.jobTitle}
             </p>
           </div>
 
