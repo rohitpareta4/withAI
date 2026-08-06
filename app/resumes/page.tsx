@@ -9,12 +9,16 @@ import Modern from "@/features/resume/templates/Modern";
 import Professional from "@/features/resume/templates/Professional";
 import { useState } from "react";
 import { useEffect } from "react";
-import { ResumeData } from "@/features/resume/types/resume.types";
+// import { ResumeData } from "@/features/resume/types/resume.types";
+import { SavedResume } from "@/features/resume/types/resume.types";
+
 
 export default function Savedresume(){
 
     // const [resumeData, setResumeData] = useState<ResumeData | null>(null);
-    const [resumeData, setResumeData] = useState([]);
+    // const [resumeData, setResumeData] = useState([]);
+    // const [resumeData, setResumeData] = useState<any[]>([]);
+    const [resumeData, setResumeData] = useState<SavedResume[]>([]);
 
     const [temp, setTemp] = useState<string | null>(null);
 
@@ -45,7 +49,7 @@ useEffect(()=>{
         <div className="flex flex-1 items-start justify-center overflow-auto bg-slate-900 p-8">
             {
     resumeData.map((item) => {
-        switch(item.template){
+        switch(item?.template){
 
             case "classic":
                 return (

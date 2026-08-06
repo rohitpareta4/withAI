@@ -137,3 +137,13 @@ export interface ResumeData {
 
   languages: Language[];
 }
+
+export interface SavedResume {
+  id: number;
+  title: string;
+  template: "classic" | "modern" | "professional";
+  resume_data: ResumeData;
+  created_at: string;
+  updated_at: string;
+  user_id: number;
+}

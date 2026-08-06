@@ -1,5 +1,7 @@
 import api from "@/lib/axios";
 import { ResumeData } from "../types/resume.types";
+// import Savedresume from "@/app/resumes/page";
+import { SavedResume } from "../types/resume.types";
 
 
 export const createresume=async(  title: string,
@@ -15,12 +17,21 @@ export const createresume=async(  title: string,
     }
 }
 
-export const get_resume=async()=>{
-    try {
-        const res=await api.get("/resume/getresume")
-        return res.data
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-}
+// export const get_resume=async()=>{
+//     try {
+//         const res=await api.get("/resume/getresume")
+//         return res.data
+//     } catch (error) {
+//         console.log(error)
+//         throw error
+//     }
+// }
+export const get_resume = async (): Promise<SavedResume[]> => {
+  try {
+    const res = await api.get<SavedResume[]>("/resume/getresume");
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
