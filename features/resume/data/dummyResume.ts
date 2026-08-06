@@ -11,6 +11,7 @@ export const dummyResume: ResumeData = {
     phone: "+1 (123) 456-7890",
 
     location: "New York, USA",
+    dob:"",
 
     linkedin: "linkedin.com/in/jamesanderson",
     github: "github.com/jamesanderson",

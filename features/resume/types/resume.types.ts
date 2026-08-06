@@ -10,6 +10,7 @@ export interface PersonalInfo {
   phone: string;
 
   location: string;
+  dob:string;
 
   linkedin: string;
   github: string;

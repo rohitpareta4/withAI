@@ -4,6 +4,7 @@ import React from "react";
 import { PersonalInfo } from "../types/resume.types"
 import { ResumeData } from "../types/resume.types"
 
+
 interface props{
     personal:PersonalInfo;
     setResumeData:React.Dispatch<React.SetStateAction<ResumeData>>;
