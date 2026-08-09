@@ -8,3 +8,10 @@ export interface Todo {
   title: string;
   completed: boolean;
 }
+
+export interface UpdateTodo {
+  id: number;
+  title: string;
+  completed: boolean;
+}
+

@@ -7,14 +7,56 @@ interface Todo{
 
 interface itemsoftodo{
     todos:Todo[];
+    setTodo: React.Dispatch<React.SetStateAction<string>>;
+    setSelectedTodoId:React.Dispatch<React.SetStateAction<number | null>>;
+    setIstodoupdate:React.Dispatch<React.SetStateAction<boolean>>;
+    setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
     setTodos:React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
+import Todo from "@/app/todo/page";
+import { update_todo,getupdate_todo } from "../services/todo.services";
+import { useEffect } from "react";
+import { deleteTodo } from "../services/todo.services";
 
 
- export default function Todoitems({todos,setTodos}:itemsoftodo){
+
+ export default function Todoitems({todos,setTodo,setSelectedTodoId,setIstodoupdate,setShowForm,setTodos}:itemsoftodo){
+
+     const updateTodo=(item:Todo)=>{
+      console.log("item-----data",item)
+      setShowForm(true)
+      setTodo(item.title)
+      setIstodoupdate(true)
+      setSelectedTodoId(item.id)
+     }
+
+    const handledelete=async(id:number)=>{
+       try {
+           await deleteTodo(id);
+
+         setTodos((prev) =>
+         prev.filter((todo) => todo.id !== id)
+         );
+       } catch (error) {
+        console.log(error)
+        throw error
+       }
+    }
    
-    const handleChange=(item:Todo)=>{
+    const handleChange=async(item:Todo)=>{
+
+      const updateObj={
+        id:item.id,
+        title:item.title,
+        completed:item.completed
+      }
+
+      const res=await update_todo(updateObj)
+      console.log("updateObj----------------res",res)
+     
+    console.log("check-----------------",item)
+
       setTodos((prev)=>
         prev.map((todo)=>
             todo.id===item.id?{...todo,completed:!todo.completed}:todo
@@ -22,9 +64,22 @@ interface itemsoftodo{
     )
 }
 
+useEffect(()=>{
+  const fn=async()=>{
+    try {
+      const res=await getupdate_todo()
+      setTodos(res)
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+  }
+  fn()
+},[])
+
     return(
-      <div>
-         {todos.map((item)=>(
+      <div className="flex flex-col gap-3">
+         {todos?.map((item)=>(
              <div key={item.id} 
                className="
               flex items-center gap-3
@@ -58,6 +113,21 @@ interface itemsoftodo{
           >
             {item.title}
           </h2>
+            <div className="flex items-center gap-2">
+  <button
+    type="button" className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs font-medium text-zinc-300 transition hover:border-zinc-500 hover:bg-zinc-800 hover:text-white active:scale-95"
+    onClick={()=>updateTodo(item)}
+  >
+    UPDATE
+  </button>
+
+  <button
+    type="button" className=" rounded-lg border border-red-900/60 bg-red-950/30 px-3 py-2 text-xs font-medium text-red-400 transition  hover:border-red-700  hover:bg-red-950/60 hover:text-red-300 active:scale-95"
+    onClick={()=>handledelete(item.id)}
+  >
+    DELETE
+  </button>
+</div>
              </div>
          ))}
       </div>

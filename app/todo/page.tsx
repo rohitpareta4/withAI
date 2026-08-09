@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Todoheaders from "@/features/todo/components/Todoheaders";
 import Todoitems from "@/features/todo/components/TodoItem";
-import { add_todo } from "@/features/todo/services/todo.services";
+import { add_todo,get_todos } from "@/features/todo/services/todo.services";
+import { updateTitle } from "@/features/todo/services/todo.services";
+import { number } from "zod";
+
  
 interface Todo{
     id:number;
@@ -11,21 +14,19 @@ interface Todo{
     completed:boolean
 }
 
-
-
 export default function Todo() {
    const [todos, setTodos] = useState<Todo[]>([]);
   const [showform, setShowForm] = useState(false);
   const [todo, setTodo] = useState("");
+  const [istodoupdate,setIstodoupdate]=useState(false)
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
 
   const addTodo = async() => {
     if (!todo.trim()) return;
-
-
     try {
         const res=await add_todo({title:todo.trim()})
         console.log("....................res",res)
-        setTodos(prev=>[...prev,res])
+        setTodos((prev) => [...prev, res]);
 
     setTodo("");
     setShowForm(false);
@@ -33,7 +34,39 @@ export default function Todo() {
         console.log(error)
     }
   };
+
+  const updateTodofn=async()=>{
+    if (selectedTodoId === null) return;
+     if (!todo.trim()) return;
+    try {
+      const res=await updateTitle(selectedTodoId,todo.trim())
+      setTodos((prev) =>
+     prev.map((item) =>
+     item.id === res.id ? res : item
+  )
+);
+      setShowForm(false)
+      setSelectedTodoId(null)
+      setIstodoupdate(false)
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+  }
     console.log("todos.................",todos)
+
+    useEffect(()=>{
+       const gettododata=async()=>{
+          try {
+            const res=await get_todos()
+            setTodos(res)
+            console.log("get--------------res",res)
+          } catch (error) {
+            console.log(error)
+          }
+       }
+       gettododata()
+    },[])
 
 
   return (
@@ -53,7 +86,7 @@ export default function Todo() {
       >
         {/* Header */}
         <Todoheaders
-          Totaltodo={todos.length}
+          Totaltodo={todos?.length}
           onAddtodo={() => setShowForm(true)}
         />
 
@@ -62,7 +95,12 @@ export default function Todo() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              addTodo();
+              if(!istodoupdate){
+                addTodo();
+              }
+              else{
+                updateTodofn();
+              }
             }}
             className="
               mt-6
@@ -115,7 +153,7 @@ export default function Todo() {
                   sm:w-auto
                 "
               >
-                Add Todo
+                {!istodoupdate?"Add Todo":"UPDATE Todo"}
               </button>
             </div>
           </form>
@@ -123,11 +161,11 @@ export default function Todo() {
 
         {/* Todo List */}
         <div className="mt-6 space-y-3">
-             <Todoitems todos={todos} setTodos={setTodos}/>
+             <Todoitems todos={todos} setTodo={setTodo} setSelectedTodoId={setSelectedTodoId} setIstodoupdate={setIstodoupdate} setShowForm={setShowForm} setTodos={setTodos}/>
         </div>
 
         {/* Empty State */}
-        {todos.length === 0 && !showform && (
+        {todos?.length === 0 && !showform && (
           <div
             className="
               mt-10
