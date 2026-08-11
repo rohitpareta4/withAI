@@ -65,6 +65,12 @@ const Navbar = () => {
           >
             Todo
           </Link>
+          <Link
+            href="/notes"
+            className="text-slate-300 transition hover:text-cyan-400"
+          >
+            Notes
+          </Link>
         </div>
 
         {/* Desktop Right */}
