@@ -1,11 +1,13 @@
 export interface Note {
   id: number;
   note: string;
-  completed: boolean;
+  user_id: number;
+  title: string
 }
 
 export interface CreateNote {
   note: string;
+  title:string;
 }
 
 export interface UpdateNote {

@@ -1,13 +1,17 @@
 "use client";
 
 interface formprops {
+  title:string;
   note: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
   setNote: React.Dispatch<React.SetStateAction<string>>;
   AddNote: () => void;
 }
 
 export default function Notesform({
+  title,
   note,
+  setTitle,
   setNote,
   AddNote,
 }: formprops) {
@@ -26,7 +30,31 @@ export default function Notesform({
           p-4
           sm:p-5
         "
-      >
+      >  
+        <input
+  type="text"
+  placeholder="Add Title..."
+  value={title}
+  onChange={(e) => setTitle(e.target.value)}
+  className="
+    w-full
+    border-0
+    border-b
+    border-zinc-800
+    bg-transparent
+    px-0
+    py-3
+    text-xl
+    font-semibold
+    text-white
+    placeholder:text-zinc-600
+    outline-none
+    transition
+    focus:border-zinc-500
+    sm:text-2xl
+    lg:text-3xl
+  "
+/>
         <textarea
           value={note}
           onChange={(e) => setNote(e.target.value)}
