@@ -10,3 +10,13 @@ export const add_note = async (data: CreateNote) => {
     throw error;
   }
 };
+
+export const get_notes = async () => {
+  try {
+    const res = await api.get("/note/getNote");
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

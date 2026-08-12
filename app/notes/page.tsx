@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Notesheader from "@/features/notes/components/Notesheader";
 import Notesform from "@/features/notes/components/Notesform";
 import { add_note } from "@/features/notes/services/notes.services";
 import { CreateNote } from "@/features/notes/types/notes.types";
+import { get_notes } from "@/features/notes/services/notes.services";
 
 interface Note {
   id: number;
@@ -27,13 +28,24 @@ export default function Notes() {
 
     const res=await add_note(newNote)
     console.log("res--------------notes",res)
-    setNotes(res)
+     setNotes((prev) => [...prev, res]);
 
-
-    // setNotes((prev)=>[...prev,newNote])
     setShowForm(false);
     setNote("")
   };
+
+  useEffect(()=>{
+      const fn=async()=>{
+        try {
+          const res=await get_notes()
+    console.log("res--------------notes",res)
+          setNotes(res)
+        } catch (error) {
+            console.log(error)
+        }
+      }
+      fn()
+  },[])
 
   return (
     <main className="min-h-screen bg-black px-4 py-6 text-white sm:px-6 lg:px-8">
