@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Notesheader from "@/features/notes/components/Notesheader";
 import Notesform from "@/features/notes/components/Notesform";
+import { add_note } from "@/features/notes/services/notes.services";
 
 interface Note {
 //   id: number;
@@ -15,14 +16,20 @@ export default function Notes() {
   const [showform, setShowForm] = useState(false);
   const [note, setNote] = useState("");
 
-  const AddNote = () => {
+  const AddNote = async() => {
 
     if(!note.trim()) return
 
     const newNote:Note={
         note:note.trim()
     }
-    setNotes((prev)=>[...prev,newNote])
+
+    const res=await add_note(newNote)
+    console.log("res--------------notes",res)
+    setNotes(res)
+
+
+    // setNotes((prev)=>[...prev,newNote])
     setShowForm(false);
     setNote("")
   };
