@@ -4,11 +4,12 @@ import { useState } from "react";
 import Notesheader from "@/features/notes/components/Notesheader";
 import Notesform from "@/features/notes/components/Notesform";
 import { add_note } from "@/features/notes/services/notes.services";
+import { CreateNote } from "@/features/notes/types/notes.types";
 
 interface Note {
-//   id: number;
+  id: number;
   note: string;
-//   completed: boolean;
+
 }
 
 export default function Notes() {
@@ -20,7 +21,7 @@ export default function Notes() {
 
     if(!note.trim()) return
 
-    const newNote:Note={
+    const newNote:CreateNote={
         note:note.trim()
     }
 
