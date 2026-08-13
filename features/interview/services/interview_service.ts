@@ -21,3 +21,12 @@ export const get_interview=async(id:string)=>{
         console.log(error)
     }
 }
+
+export const addGithub=async(data:string)=>{
+    try {
+        const res=await api.post("/Interview/giturl",data)
+        return res.data
+    } catch (error) {
+        console.log(error)
+    }
+}
