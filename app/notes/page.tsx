@@ -83,11 +83,11 @@ export default function Notes() {
           </a>
         </div>
 
-        {/* Header */}
+        {/* Header
         <Notesheader
           Noteslength={notes.length}
           onAddnotes={() => setShowForm(true)}
-        />
+        /> */}
 
         {/* 40% Notes + 60% Editor */}
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-5">
@@ -96,7 +96,7 @@ export default function Notes() {
           {/* LEFT SIDE - 40% */}
           {/* ========================= */}
 
-          <section className="lg:col-span-2">
+          <section className="lg:col-span-2 order-2 lg:order-1">
 
             {/* Section heading */}
             <div className="mb-4">
@@ -132,7 +132,12 @@ export default function Notes() {
           {/* RIGHT SIDE - 60% */}
           {/* ========================= */}
 
-          <section className="lg:col-span-3">
+          <section className="lg:col-span-3 flex flex-col gap-4 order-1 lg:order-2">
+
+              <Notesheader
+          Noteslength={notes.length}
+          onAddnotes={() => setShowForm(true)}
+        />
 
             {showform ? (
 
@@ -168,7 +173,7 @@ export default function Notes() {
 
                   <button
                     onClick={() => setShowForm(true)}
-                    className="mt-6 rounded-lg bg-white px-5 py-2.5 text-sm font-medium text-black transition hover:bg-zinc-200"
+                    className="mt-6 rounded-lg bg-white px-5 py-2.5 text-sm font-bold text-black transition hover:bg-zinc-200"
                   >
                     + Add Note
                   </button>

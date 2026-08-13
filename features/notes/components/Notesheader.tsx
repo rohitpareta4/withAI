@@ -45,7 +45,7 @@ export default function Notesheader({
             px-5
             py-3
             text-sm
-            font-medium
+            font-bold
             text-black
             transition
             hover:bg-zinc-200
