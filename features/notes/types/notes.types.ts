@@ -14,3 +14,9 @@ export interface UpdateNote {
   id: number;
   note: string;
 }
+
+export interface UpdateNote{
+  id: number;
+  note: string;
+  title: string
+}

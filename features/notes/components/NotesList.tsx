@@ -1,11 +1,31 @@
 import { Note } from "../types/notes.types";
 import { SquarePen, Trash2 } from "lucide-react";
+import { delete_note } from "../services/notes.services";
+import toast from "react-hot-toast";
 
 interface NotesListProps {
   notes: Note[];
+  setNotes:React.Dispatch<React.SetStateAction<Note[]>>;
+  setTitle:React.Dispatch<React.SetStateAction<string>>;
+  setNote:React.Dispatch<React.SetStateAction<string>>;
+  handleedit:()=>void;
 }
 
-export default function Noteslist({ notes }: NotesListProps) {
+export default function Noteslist({ notes,setNotes,setTitle,setNote,handleedit }: NotesListProps) {
+
+  const getId=async(id:number)=>{
+    try {
+      const res=await delete_note(id)
+      console.log(res)
+      toast.success(res.message)
+    setNotes((prev)=>prev.filter((x)=>x.id!=id))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+ 
+
   return (
     <div
       className="
@@ -83,6 +103,7 @@ export default function Noteslist({ notes }: NotesListProps) {
                     sm:h-9
                     sm:w-9
                   "
+                  onClick={()=>handleedit(item.id,item.title,item.note)}
                 >
                   <SquarePen className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
                 </button>
@@ -108,6 +129,7 @@ export default function Noteslist({ notes }: NotesListProps) {
                     sm:h-9
                     sm:w-9
                   "
+                  onClick={()=>getId(item.id)}
                 >
                   <Trash2 className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
                 </button>

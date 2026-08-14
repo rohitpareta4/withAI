@@ -6,6 +6,8 @@ interface formprops {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   setNote: React.Dispatch<React.SetStateAction<string>>;
   AddNote: () => void;
+  isupdate:boolean;
+  callEditapi:()=>void
 }
 
 export default function Notesform({
@@ -14,13 +16,20 @@ export default function Notesform({
   setTitle,
   setNote,
   AddNote,
+  isupdate,
+  callEditapi
 }: formprops) {
   return (
     <div className="w-full">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          AddNote();
+          if(!isupdate){
+            AddNote();
+          }
+          else{
+            callEditapi();
+          }
         }}
         className="
           w-full
@@ -97,7 +106,7 @@ export default function Notesform({
               sm:w-auto
             "
           >
-            ADD NOTE
+            {isupdate?"UPDATE NOTE":"ADD NOTE"}
           </button>
         </div>
       </form>

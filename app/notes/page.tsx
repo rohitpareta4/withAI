@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Notesheader from "@/features/notes/components/Notesheader";
 import Notesform from "@/features/notes/components/Notesform";
 import Noteslist from "@/features/notes/components/NotesList";
+import { editNote } from "@/features/notes/services/notes.services";
+import { UpdateNote } from "@/features/notes/types/notes.types";
 
 import {
   add_note,
@@ -12,6 +14,7 @@ import {
 } from "@/features/notes/services/notes.services";
 
 import { CreateNote } from "@/features/notes/types/notes.types";
+import toast from "react-hot-toast";
 
 interface Note {
   id: number;
@@ -25,6 +28,43 @@ export default function Notes() {
   const [showform, setShowForm] = useState(false);
   const [note, setNote] = useState("");
   const [title, setTitle] = useState("");
+  const [isupdate,setIsupdate]=useState(false)
+  const [selectedNoteid, setSelectedNoeId] = useState<number | null>(null);
+  
+
+   const handleedit=(id:number,tit:string,note:string)=>{
+    setSelectedNoeId(id)
+    setIsupdate(true)
+    setShowForm(true)
+    console.log("id----------",id)
+    console.log("tit----------",tit)
+    console.log("note----------",note)
+    setTitle(tit)
+    setNote(note)
+  }
+
+  const callEditapi=async()=>{
+    if(!selectedNoteid) return
+
+    const addData:UpdateNote={
+      id:selectedNoteid,
+      title:title,
+      note:note
+    }
+
+    try {
+      const res=await editNote(addData)
+      toast.success("Note Updated Succesfully..")
+      console.log(res)
+      setNotes((prev)=>prev.map((x)=>
+        x.id==selectedNoteid?res:x
+      ))
+      setShowForm(false)
+      setIsupdate(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // Add new note
   const AddNote = async () => {
@@ -112,7 +152,7 @@ export default function Notes() {
 
             {/* Notes list */}
             {notes.length > 0 ? (
-              <Noteslist notes={notes} />
+              <Noteslist notes={notes} setNotes={setNotes} setTitle={setTitle} setNote={setNote} handleedit={handleedit}/>
             ) : (
               <div className="rounded-xl border border-dashed border-zinc-800 px-4 py-12 text-center sm:py-16">
                 <p className="text-sm text-zinc-500 sm:text-base">
@@ -149,6 +189,8 @@ export default function Notes() {
                   note={note}
                   setNote={setNote}
                   AddNote={AddNote}
+                  isupdate={isupdate}
+                  callEditapi={callEditapi}
                 />
               </div>
 
