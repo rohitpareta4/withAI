@@ -8,7 +8,7 @@ interface NotesListProps {
   setNotes:React.Dispatch<React.SetStateAction<Note[]>>;
   setTitle:React.Dispatch<React.SetStateAction<string>>;
   setNote:React.Dispatch<React.SetStateAction<string>>;
-  handleedit:()=>void;
+  handleedit:(id: number, tit: string, note: string)=>void;
 }
 
 export default function Noteslist({ notes,setNotes,setTitle,setNote,handleedit }: NotesListProps) {
