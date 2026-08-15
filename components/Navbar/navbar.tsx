@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X, User, LogOut } from "lucide-react";
 import { authme } from "@/services/auth.service";
+import { SavedResume } from "@/features/resume/types/resume.types";
+import { get_resume } from "@/features/resume/services/resume.services";
 
 interface AuthUser {
   id: number;
@@ -16,6 +18,24 @@ interface AuthUser {
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
+
+      const [resumeData, setResumeData] = useState<SavedResume[]>([]);
+  
+  
+  useEffect(()=>{
+    const callIt=async()=>{
+        try {
+          const res=await get_resume()
+          console.log("saved-----------------resume--------",res)
+          setResumeData(res)
+          console.log("resumeData",resumeData)
+          // setTemp(res.template)
+        } catch (error) {
+          console.log(error)
+        }
+    }
+    callIt()
+  },[])
 
   useEffect(() => {
     const run = async () => {
@@ -46,10 +66,10 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-8 md:flex">
           <Link
-            href="/resumes"
+            href="/resumebuilder"
             className="text-slate-300 transition hover:text-cyan-400"
           >
-            Saved Resume
+            {resumeData.length>0?"My Resume":"Build Resume"}
           </Link>
 
           <Link
@@ -126,7 +146,7 @@ const Navbar = () => {
         <div className="border-t border-slate-800 bg-slate-950 md:hidden">
           <div className="flex flex-col px-5 py-4">
             <Link
-              href="/resume"
+              href="/resumebuilder"
               onClick={() => setOpen(false)}
               className="rounded-md px-3 py-3 text-slate-300 transition hover:bg-slate-900 hover:text-cyan-400"
             >
@@ -148,6 +168,13 @@ const Navbar = () => {
             >
               Todo
             </Link>
+
+              <Link
+            href="/notes"
+            className="text-slate-300 transition hover:text-cyan-400"
+          >
+            Notes
+          </Link>
 
             <div className="mt-4 border-t border-slate-800 pt-4">
               {user ? (

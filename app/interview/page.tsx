@@ -80,8 +80,7 @@ export default function InterviewPage() {
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-400 sm:text-lg">
-            Practice with an AI interviewer or let WithAI analyze your
-            GitHub project and create a personalized technical interview.
+            Practice with an AI interviewer
           </p>
         </div>
 
@@ -89,7 +88,7 @@ export default function InterviewPage() {
         <div className="mt-12 grid w-full max-w-4xl grid-cols-1 gap-5 md:grid-cols-2">
 
           {/* General Interview */}
-          <button
+           <button
             onClick={() => router.push("/interview/setup")}
             className="
               group rounded-2xl border border-slate-800
@@ -100,19 +99,19 @@ export default function InterviewPage() {
               hover:bg-slate-900
               sm:p-8
             "
-          >
-            <div className="flex items-start justify-between">
+          > 
+             <div className="flex items-center justify-between">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
                 <Code2 size={24} />
               </div>
 
               <ArrowRight
-                className="text-slate-600 transition group-hover:translate-x-1 group-hover:text-cyan-400"
+                className="text-slate-600 transition group-hover:translate-x-1 group-hover:text-cyan-400" 
                 size={22}
               />
-            </div>
+            </div> 
 
-            <h2 className="mt-6 text-xl font-semibold sm:text-2xl">
+             <h2 className="mt-6 text-xl font-semibold sm:text-2xl">
               Start a General Interview
             </h2>
 
@@ -130,16 +129,16 @@ export default function InterviewPage() {
               </span>
               <span className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-300">
                 HR
-              </span>
+              </span> 
             </div>
 
             <div className="mt-7 text-sm font-medium text-cyan-400">
               Configure interview →
             </div>
           </button>
-
+ 
           {/* GitHub Interview */}
-          <button
+          {/* <button
             onClick={() => router.push("/interview/github")}
             className="
               group rounded-2xl border border-slate-800
@@ -154,15 +153,15 @@ export default function InterviewPage() {
             <div className="flex items-start justify-between">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400">
                 {/* <Github size={24} /> */}
-              </div>
+              {/* </div>
 
               <ArrowRight
                 className="text-slate-600 transition group-hover:translate-x-1 group-hover:text-purple-400"
                 size={22}
               />
-            </div>
+            </div>  */}
 
-            <h2 className="mt-6 text-xl font-semibold sm:text-2xl">
+            {/* <h2 className="mt-6 text-xl font-semibold sm:text-2xl">
               Interview From GitHub
             </h2>
 
@@ -170,9 +169,9 @@ export default function InterviewPage() {
               Enter your GitHub repository and let AI analyze your project,
               technologies, architecture, and code to generate personalized
               questions.
-            </p>
+            </p> */}
 
-            <div className="mt-6 flex flex-wrap gap-2">
+            {/* <div className="mt-6 flex flex-wrap gap-2">
               <span className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-300">
                 Project Based
               </span>
@@ -182,13 +181,13 @@ export default function InterviewPage() {
               <span className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-300">
                 Personalized
               </span>
-            </div>
+            </div> */}
 
-            <div className="mt-7 text-sm font-medium text-purple-400">
+            {/* <div className="mt-7 text-sm font-medium text-purple-400">
               Analyze repository →
             </div>
-          </button>
-        </div>
+          </button> */}
+        </div> 
 
         {/* Bottom note */}
         <p className="mt-8 text-center text-xs text-slate-600 sm:text-sm">
