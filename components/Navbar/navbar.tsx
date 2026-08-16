@@ -8,6 +8,9 @@ import { Menu, X, User, LogOut } from "lucide-react";
 import { authme } from "@/services/auth.service";
 import { SavedResume } from "@/features/resume/types/resume.types";
 import { get_resume } from "@/features/resume/services/resume.services";
+import { percent } from "framer-motion";
+import { todo } from "node:test";
+import { get_todos } from "@/features/todo/services/todo.services";
 
 interface AuthUser {
   id: number;
@@ -15,9 +18,18 @@ interface AuthUser {
   email: string;
 }
 
+interface Todo {
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
+
+  
+  
 
       const [resumeData, setResumeData] = useState<SavedResume[]>([]);
   
@@ -51,6 +63,12 @@ const Navbar = () => {
 
     run();
   }, []);
+
+  
+
+
+   
+
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-slate-800 bg-black/90 backdrop-blur">

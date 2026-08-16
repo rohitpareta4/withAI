@@ -1,6 +1,71 @@
+"use client"
+
 import Link from "next/link";
+import { useState,useEffect } from "react";
+import { get_todos } from "@/features/todo/services/todo.services";
 
 export default function HeroSection() {
+
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+
+
+   useEffect(() => {
+    const getTodoData = async () => {
+      try {
+        const res = await get_todos();
+
+        console.log("todos:", res);
+
+        setTodos(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getTodoData();
+  }, []);
+
+  // -----------------------------
+  // TODO ACTIVITY CALCULATION
+  // -----------------------------
+
+  const totalTodos = todos.length;
+
+  let completedTodos = 0;
+
+  for (let i = 0; i < todos.length; i++) {
+    if (todos[i]?.completed === true) {
+      completedTodos++;
+    }
+  }
+
+  let percentage = 0;
+
+  if (totalTodos > 0) {
+    percentage = Math.round(
+      (completedTodos / totalTodos) * 100
+    );
+  }
+
+  // -----------------------------
+  // ACTIVITY COLOR
+  // -----------------------------
+
+  let activityColor = "bg-slate-800";
+
+  if (percentage > 0 && percentage < 25) {
+    activityColor = "bg-green-950";
+  } else if (percentage >= 25 && percentage < 50) {
+    activityColor = "bg-green-800";
+  } else if (percentage >= 50 && percentage < 75) {
+    activityColor = "bg-green-600";
+  } else if (percentage >= 75) {
+    activityColor = "bg-green-400";
+  }
+
+
+
   return (
     <section className="relative overflow-hidden bg-black text-white">
       {/* Background */}
@@ -45,7 +110,12 @@ export default function HeroSection() {
 
         {/* Right */}
 
+  
+
         <div className="w-full max-w-md">
+
+
+
           <div className="rounded-3xl border border-slate-800 bg-slate-950/80 p-6 backdrop-blur-xl shadow-[0_0_40px_rgba(6,182,212,.12)]">
             <h3 className="text-lg font-semibold">Your Dashboard</h3>
 
@@ -65,11 +135,28 @@ export default function HeroSection() {
                 <span className="text-cyan-400">25 Days</span>
               </div>
 
-              <div className="rounded-xl bg-cyan-500/10 border border-cyan-500/20 p-4">
-                <p className="text-sm text-slate-300">
-                  Everything you need to prepare for placements in one place.
-                </p>
-              </div>
+              
+               <div className="mt-4 flex flex-wrap gap-1.5">
+          {Array.from({ length: 30 }, (_, index) => {
+            const isToday = index === 0;
+
+            return (
+              <div
+                key={index}
+                className={`h-3.5 w-3.5 rounded-sm ${
+                  isToday
+                    ? activityColor
+                    : "bg-slate-800"
+                }`}
+                title={
+                  isToday
+                    ? `${completedTodos}/${totalTodos} completed today`
+                    : "No activity yet"
+                }
+              />
+            );
+          })}
+        </div>
             </div>
           </div>
         </div>
