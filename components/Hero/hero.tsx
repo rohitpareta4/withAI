@@ -14,22 +14,20 @@ export default function HeroSection() {
         {/* Left */}
 
         <div className="max-w-2xl">
-          <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-sm text-cyan-400">
-            🚀 AI Powered Placement Platform
-          </span>
+        
 
           <h1 className="mt-8 text-5xl font-bold leading-tight md:text-7xl">
-            Crack Your
-            <span className="block bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              Dream Job
-            </span>
-            with WithAI
+              Build Your
+         <span className="block bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+               Career
+         </span>
+            with AI
           </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-8 text-slate-400">
-            Build ATS resumes, practice AI interviews and manage your placement
-            journey—all in one platform.
-          </p>
+<p className="mt-6 max-w-xl text-lg leading-8 text-slate-400">
+  Create resumes, practice interviews, make notes, manage your tasks,
+  and stay on track—all in one place.
+</p>
 
           <div className="mt-10 flex flex-wrap gap-4">
             {/* <button className="rounded-xl bg-cyan-500 px-7 py-3 font-semibold transition hover:bg-cyan-400">
