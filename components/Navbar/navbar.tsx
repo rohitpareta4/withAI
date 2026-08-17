@@ -6,11 +6,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X, User, LogOut } from "lucide-react";
 import { authme } from "@/services/auth.service";
-import { SavedResume } from "@/features/resume/types/resume.types";
 import { get_resume } from "@/features/resume/services/resume.services";
-import { percent } from "framer-motion";
-import { todo } from "node:test";
-import { get_todos } from "@/features/todo/services/todo.services";
+import { useQuery } from "@tanstack/react-query";
 
 interface AuthUser {
   id: number;
@@ -22,48 +19,20 @@ interface AuthUser {
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState<AuthUser | null>(null);
 
-  
-  
+  //get resume
+  const {data:resumeData=[],isLoading:resumeLoading}=useQuery({
+    queryKey:["get_resume"],
+    queryFn:get_resume
+  })
 
-      const [resumeData, setResumeData] = useState<SavedResume[]>([]);
-  
-  
-  useEffect(()=>{
-    const callIt=async()=>{
-        try {
-          const res=await get_resume()
-          console.log("saved-----------------resume--------",res)
-          setResumeData(res)
-          console.log("resumeData",resumeData)
-          // setTemp(res.template)
-        } catch (error) {
-          console.log(error)
-        }
-    }
-    callIt()
-  },[])
+  //get authenticated user
+  const {data:user,isLoading:authLoading}=useQuery<AuthUser>({
+    queryKey:["authme"],
+    queryFn:authme,
+    retry: false
+  })
 
-  useEffect(() => {
-    const run = async () => {
-      try {
-        const res = await authme();
-        console.log("Authenticated User:", res);
-        setUser(res);
-      } catch (error) {
-        console.error(error);
-        setUser(null);
-      }
-    };
-
-    run();
-  }, []);
-
-  
-
-
-   
 
 
   return (
@@ -83,7 +52,7 @@ const Navbar = () => {
             href="/resumebuilder"
             className="text-slate-300 transition hover:text-cyan-400"
           >
-            {resumeData.length>0?"My Resume":"Build Resume"}
+            {resumeData?.length>0?"My Resume":"Build Resume"}
           </Link>
 
           <Link
@@ -109,7 +78,12 @@ const Navbar = () => {
 
         {/* Desktop Right */}
         <div className="hidden items-center gap-4 md:flex">
-          {user ? (
+          {authLoading ? (
+             <div className="flex items-center gap-3">
+              <div className="h-10 w-28 animate-pulse rounded-full bg-slate-800" />
+              <div className="h-10 w-20 animate-pulse rounded-lg bg-slate-800" />
+            </div>
+          ): user?(
             <>
               <div className="flex items-center gap-3 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 transition hover:border-cyan-500">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500">
@@ -191,7 +165,12 @@ const Navbar = () => {
           </Link>
 
             <div className="mt-4 border-t border-slate-800 pt-4">
-              {user ? (
+              {authLoading ? (
+             <div className="flex items-center gap-3">
+                <div className="h-10 w-28 animate-pulse rounded-full bg-slate-800" />
+                <div className="h-10 w-20 animate-pulse rounded-lg bg-slate-800" />
+            </div>
+              ): user?(
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 rounded-lg bg-slate-900 p-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500">

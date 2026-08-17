@@ -5,7 +5,11 @@ import Todoheaders from "@/features/todo/components/Todoheaders";
 import Todoitems from "@/features/todo/components/TodoItem";
 import { add_todo,get_todos } from "@/features/todo/services/todo.services";
 import { updateTitle } from "@/features/todo/services/todo.services";
-import { number } from "zod";
+import { number, string } from "zod";
+import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { title } from "process";
 
  
 interface Todo{
@@ -15,58 +19,75 @@ interface Todo{
 }
 
 export default function Todo() {
-   const [todos, setTodos] = useState<Todo[]>([]);
+  //  const [todos, setTodos] = useState<Todo[]>([]);
   const [showform, setShowForm] = useState(false);
   const [todo, setTodo] = useState("");
   const [istodoupdate,setIstodoupdate]=useState(false)
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
 
-  const addTodo = async() => {
+  const queryclient=useQueryClient()
+
+  const addTodoMutation=useMutation({
+      mutationFn:add_todo,
+
+      onSuccess:(newTodo)=>{
+      
+          queryclient.setQueryData<Todo[]>(["todos"], (oldTodos = []) => [
+        ...oldTodos,
+          newTodo,
+        ]);
+
+         setTodo("");
+        setShowForm(false);
+      },
+
+      onError:(error)=>{
+         console.log(error)
+      }
+  })
+
+  const addTodo =() => {
     if (!todo.trim()) return;
-    try {
-        const res=await add_todo({title:todo.trim()})
-        console.log("....................res",res)
-        setTodos((prev) => [...prev, res]);
+    
+    addTodoMutation.mutate({
+      title:todo.trim()
+    })
 
-    setTodo("");
-    setShowForm(false);
-    } catch (error) {
-        console.log(error)
-    }
-  };
+  }
 
-  const updateTodofn=async()=>{
-    if (selectedTodoId === null) return;
-     if (!todo.trim()) return;
-    try {
-      const res=await updateTitle(selectedTodoId,todo.trim())
-      setTodos((prev) =>
-     prev.map((item) =>
-     item.id === res.id ? res : item
-  )
-);
-      setShowForm(false)
+  const updateMutation=useMutation({
+    mutationFn:({id,title}:{id:number,title:string})=>updateTitle(id,title),
+
+    onSuccess:(updatetodo)=>{
+      queryclient.setQueryData<Todo[]>(
+        ["todos"],(oldtodos=[])=>
+          oldtodos.map((item)=>
+            item.id===updatetodo.id?updatetodo:item
+          )
+      )
+    
+     setShowForm(false)
       setSelectedTodoId(null)
       setIstodoupdate(false)
-    } catch (error) {
-      console.log(error)
-      throw error
-    }
-  }
-    console.log("todos.................",todos)
+    },
+     onError: (error) => {
+        console.log(error);
+     },
+  })
 
-    useEffect(()=>{
-       const gettododata=async()=>{
-          try {
-            const res=await get_todos()
-            setTodos(res)
-            console.log("get--------------res",res)
-          } catch (error) {
-            console.log(error)
-          }
-       }
-       gettododata()
-    },[])
+  const updateTodofn=()=>{
+    if (selectedTodoId === null) return;
+     if (!todo.trim()) return;
+   
+    updateMutation.mutate({
+      id:selectedTodoId,title:todo.trim()
+  })
+  }
+
+    const {data:todos=[],isLoading:todosLoading}=useQuery({
+      queryKey:["todos"],
+      queryFn:get_todos
+    })
 
 
   return (
@@ -161,7 +182,7 @@ export default function Todo() {
 
         {/* Todo List */}
         <div className="mt-6 space-y-3">
-             <Todoitems todos={todos} setTodo={setTodo} setSelectedTodoId={setSelectedTodoId} setIstodoupdate={setIstodoupdate} setShowForm={setShowForm} setTodos={setTodos}/>
+             <Todoitems todos={todos} setTodo={setTodo} setSelectedTodoId={setSelectedTodoId} setIstodoupdate={setIstodoupdate} setShowForm={setShowForm} />
         </div>
 
         {/* Empty State */}

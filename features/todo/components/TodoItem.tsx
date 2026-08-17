@@ -18,10 +18,12 @@ import Todo from "@/app/todo/page";
 import { update_todo,getupdate_todo } from "../services/todo.services";
 import { useEffect } from "react";
 import { deleteTodo } from "../services/todo.services";
+import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { error } from "console";
 
-
-
- export default function Todoitems({todos,setTodo,setSelectedTodoId,setIstodoupdate,setShowForm,setTodos}:itemsoftodo){
+ export default function Todoitems({todos,setTodo,setSelectedTodoId,setIstodoupdate,setShowForm}:itemsoftodo){
 
      const updateTodo=(item:Todo)=>{
       console.log("item-----data",item)
@@ -31,18 +33,30 @@ import { deleteTodo } from "../services/todo.services";
       setSelectedTodoId(item.id)
      }
 
-    const handledelete=async(id:number)=>{
-       try {
-           await deleteTodo(id);
+     const queryclient= useQueryClient()
 
-         setTodos((prev) =>
-         prev.filter((todo) => todo.id !== id)
-         );
-       } catch (error) {
-        console.log(error)
-        throw error
-       }
-    }
+ 
+
+ const deleteMutation = useMutation({
+  mutationFn: ({ id }: { id: number }) => deleteTodo(id),
+
+  onSuccess: (_, variables) => {
+    queryclient.setQueryData<Todo[]>(
+      ["todos"],
+      (oldtodos = []) =>
+        oldtodos.filter((item) => item.id !== variables.id)
+    );
+  },
+
+  onError: (error) => {
+    console.log(error);
+  },
+});
+
+const handledelete = (id: number) => {
+  deleteMutation.mutate({ id });
+};
+
    
     const handleChange=async(item:Todo)=>{
 
@@ -64,18 +78,6 @@ import { deleteTodo } from "../services/todo.services";
     )
 }
 
-useEffect(()=>{
-  const fn=async()=>{
-    try {
-      const res=await getupdate_todo()
-      setTodos(res)
-    } catch (error) {
-      console.log(error)
-      throw error
-    }
-  }
-  fn()
-},[])
 
     return(
       <div className="flex flex-col gap-3">
