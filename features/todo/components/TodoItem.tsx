@@ -11,7 +11,7 @@ interface itemsoftodo{
     setSelectedTodoId:React.Dispatch<React.SetStateAction<number | null>>;
     setIstodoupdate:React.Dispatch<React.SetStateAction<boolean>>;
     setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
-    setTodos:React.Dispatch<React.SetStateAction<Todo[]>>;
+    // setTodos:React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
 import Todo from "@/app/todo/page";
