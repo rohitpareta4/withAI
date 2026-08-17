@@ -18,11 +18,7 @@ interface AuthUser {
   email: string;
 }
 
-interface Todo {
-  id: number;
-  title: string;
-  completed: boolean;
-}
+
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);

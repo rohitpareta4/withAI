@@ -4,6 +4,12 @@ import Link from "next/link";
 import { useState,useEffect } from "react";
 import { get_todos } from "@/features/todo/services/todo.services";
 
+interface Todo {
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
 export default function HeroSection() {
 
   const [todos, setTodos] = useState<Todo[]>([]);
