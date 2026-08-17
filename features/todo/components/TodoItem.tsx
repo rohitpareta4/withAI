@@ -71,11 +71,11 @@ const handledelete = (id: number) => {
      
     console.log("check-----------------",item)
 
-      setTodos((prev)=>
-        prev.map((todo)=>
-            todo.id===item.id?{...todo,completed:!todo.completed}:todo
-        )
-    )
+    //   setTodos((prev)=>
+    //     prev.map((todo)=>
+    //         todo.id===item.id?{...todo,completed:!todo.completed}:todo
+    //     )
+    // )
 }
 
 
