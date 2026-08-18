@@ -105,7 +105,7 @@ console.log(typeof todosByDate)
   for(const [date,data] of Object.entries(todosByDate)){
     const currentDate=new Date(date)
     if(previousDatepreviousDate!==null){
-      const diff=(currentDate-previousDatepreviousDate)/(1000*60*60*24)
+      const diff=(currentDate.getTime()-previousDatepreviousDate.getTime())/(1000*60*60*24)
       if(diff>1){
         streak=0;
       }
