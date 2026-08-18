@@ -3,18 +3,19 @@
 import Link from "next/link";
 import { useState,useEffect } from "react";
 import { get_todos } from "@/features/todo/services/todo.services";
+import { object } from "zod";
+import { data } from "framer-motion/client";
 
 interface Todo {
   id: number;
   title: string;
   completed: boolean;
+  createdAt:Date
 }
 
 export default function HeroSection() {
 
   const [todos, setTodos] = useState<Todo[]>([]);
-
-
 
    useEffect(() => {
     const getTodoData = async () => {
@@ -31,6 +32,33 @@ export default function HeroSection() {
 
     getTodoData();
   }, []);
+
+  const todosByDate = todos.reduce((acc, todo) => {
+  const date = new Date(todo.createdAt)
+    .toISOString()
+    .split("T")[0];
+
+  if (!acc[date]) {
+    acc[date] = {
+      total: 0,
+      completed: 0,
+      percent:0
+    };
+  }
+
+  acc[date].total++;
+
+  if (todo.completed) {
+    acc[date].completed++;
+  }
+
+  acc[date].percent=(acc[date].completed/acc[date].total)*100
+
+  return acc;
+}, {} as Record<string, { total: number; completed: number, percent:number}>);
+
+console.log("todosByDate..............",todosByDate)
+console.log(typeof todosByDate)
 
   // -----------------------------
   // TODO ACTIVITY CALCULATION
@@ -69,6 +97,38 @@ export default function HeroSection() {
   } else if (percentage >= 75) {
     activityColor = "bg-green-400";
   }
+  
+
+  //streak code
+  let streak=0;
+  let previousDatepreviousDate=null
+  for(const [date,data] of Object.entries(todosByDate)){
+    const currentDate=new Date(date)
+    if(previousDatepreviousDate!==null){
+      const diff=(currentDate-previousDatepreviousDate)/(1000*60*60*24)
+      if(diff>1){
+        streak=0;
+      }
+    }
+  
+    if(data.total-data.completed==0){
+      streak++;
+    }
+    else{
+      streak=0;
+    }
+    previousDatepreviousDate=currentDate
+
+  }
+  console.log("streak.............",streak)
+
+  const dates=[]
+  for(let i=0;i<30;i++){
+    const date=new Date()
+    date.setDate(date.getDate()-i)
+
+    dates.push(date)
+  }
 
 
 
@@ -101,9 +161,7 @@ export default function HeroSection() {
 </p>
 
           <div className="mt-10 flex flex-wrap gap-4">
-            {/* <button className="rounded-xl bg-cyan-500 px-7 py-3 font-semibold transition hover:bg-cyan-400">
-              Get Started
-            </button> */}
+          
 
           <Link
          href="#features"
@@ -137,32 +195,39 @@ export default function HeroSection() {
               </div>
 
               <div className="rounded-xl bg-slate-900 p-4 flex items-center justify-between">
-                <span>🔥 Learning Streak</span>
-                <span className="text-cyan-400">25 Days</span>
+                <span>🔥 Streak</span>
+                <span className="text-cyan-400">{streak} Days</span>
               </div>
 
               
                <div className="mt-4 flex flex-wrap gap-1.5">
-          {Array.from({ length: 30 }, (_, index) => {
-            const isToday = index === 0;
+                 {dates.map((item) => {
+    const dateKey = item.toISOString().split("T")[0];
+    const data = todosByDate[dateKey];
 
-            return (
-              <div
-                key={index}
-                className={`h-3.5 w-3.5 rounded-sm ${
-                  isToday
-                    ? activityColor
-                    : "bg-slate-800"
-                }`}
-                title={
-                  isToday
-                    ? `${completedTodos}/${totalTodos} completed today`
-                    : "No activity yet"
-                }
-              />
-            );
-          })}
-        </div>
+    let color = "bg-gray-200";
+
+    if (data) {
+        if (data.percent === 100) {
+            color = "bg-green-700";
+        } else if (data.percent >= 75) {
+            color = "bg-green-500";
+        } else if (data.percent >= 50) {
+            color = "bg-green-400";
+        } else if (data.percent > 0) {
+            color = "bg-green-200";
+        }
+    }
+
+    return (
+        <div
+            key={dateKey}
+            className={`w-6 h-6 rounded-sm ${color}`}
+            title={`${dateKey}`}
+        />
+    );
+})}
+              </div>
             </div>
           </div>
         </div>

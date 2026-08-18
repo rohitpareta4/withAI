@@ -89,6 +89,8 @@ export default function Todo() {
       queryFn:get_todos
     })
 
+    console.log("data of todos.................",todos)
+
 
   return (
     <main className="min-h-screen bg-black text-white">
