@@ -46,102 +46,66 @@ todos.forEach(todo => {
   );
 });
 
-//   const todosByDate = todos.reduce((acc, todo) => {
-//   const date = new Date(todo.createdAt)
-//     .toISOString()
-//     .split("T")[0];
+  const todosByDate = todos.reduce((acc, todo) => {
+  const date = new Date(todo.createdAt)
+    .toISOString()
+    .split("T")[0];
 
-//   if (!acc[date]) {
-//     acc[date] = {
-//       total: 0,
-//       completed: 0,
-//       percent:0
-//     };
-//   }
+  if (!acc[date]) {
+    acc[date] = {
+      total: 0,
+      completed: 0,
+      percent:0
+    };
+  }
 
-//   acc[date].total++;
+  acc[date].total++;
 
-//   if (todo.completed) {
-//     acc[date].completed++;
-//   }
+  if (todo.completed) {
+    acc[date].completed++;
+  }
 
-//   acc[date].percent=(acc[date].completed/acc[date].total)*100
+  acc[date].percent=(acc[date].completed/acc[date].total)*100
 
-//   return acc;
-// }, {} as Record<string, { total: number; completed: number, percent:number}>);
+  return acc;
+}, {} as Record<string, { total: number; completed: number, percent:number}>);
 
-// console.log("todosByDate..............",todosByDate)
-// console.log(typeof todosByDate)
+console.log("todosByDate..............",todosByDate)
+console.log(typeof todosByDate)
 
-//   // -----------------------------
-//   // TODO ACTIVITY CALCULATION
-//   // -----------------------------
 
-//   const totalTodos = todos.length;
 
-//   let completedTodos = 0;
 
-//   for (let i = 0; i < todos.length; i++) {
-//     if (todos[i]?.completed === true) {
-//       completedTodos++;
-//     }
-//   }
-
-//   let percentage = 0;
-
-//   if (totalTodos > 0) {
-//     percentage = Math.round(
-//       (completedTodos / totalTodos) * 100
-//     );
-//   }
-
-//   // -----------------------------
-//   // ACTIVITY COLOR
-//   // -----------------------------
-
-//   let activityColor = "bg-slate-800";
-
-//   if (percentage > 0 && percentage < 25) {
-//     activityColor = "bg-green-950";
-//   } else if (percentage >= 25 && percentage < 50) {
-//     activityColor = "bg-green-800";
-//   } else if (percentage >= 50 && percentage < 75) {
-//     activityColor = "bg-green-600";
-//   } else if (percentage >= 75) {
-//     activityColor = "bg-green-400";
-//   }
+  //streak code
+  let streak=0;
+  let previousDatepreviousDate=null
+  for(const [date,data] of Object.entries(todosByDate)){
+    const currentDate=new Date(date)
+    if(previousDatepreviousDate!==null){
+      const diff=(currentDate.getTime()-previousDatepreviousDate.getTime())/(1000*60*60*24)
+      if(diff>1){
+        streak=0;
+      }
+    }
   
+    if(data.total-data.completed==0){
+      streak++;
+    }
+    else{
+      streak=0;
+    }
+    previousDatepreviousDate=currentDate
 
-//   //streak code
-//   let streak=0;
-//   let previousDatepreviousDate=null
-//   for(const [date,data] of Object.entries(todosByDate)){
-//     const currentDate=new Date(date)
-//     if(previousDatepreviousDate!==null){
-//       const diff=(currentDate.getTime()-previousDatepreviousDate.getTime())/(1000*60*60*24)
-//       if(diff>1){
-//         streak=0;
-//       }
-//     }
-  
-//     if(data.total-data.completed==0){
-//       streak++;
-//     }
-//     else{
-//       streak=0;
-//     }
-//     previousDatepreviousDate=currentDate
+  }
+  console.log("streak.............",streak)
 
-//   }
-//   console.log("streak.............",streak)
+  const dates=[]
+  for(let i=0;i<30;i++){
+    const date=new Date()
+    date.setDate(date.getDate()-i)
 
-//   const dates=[]
-//   for(let i=0;i<30;i++){
-//     const date=new Date()
-//     date.setDate(date.getDate()-i)
-
-//     dates.push(date)
-//   }
+    dates.push(date)
+  }
 
 
 
@@ -209,10 +173,10 @@ todos.forEach(todo => {
 
               <div className="rounded-xl bg-slate-900 p-4 flex items-center justify-between">
                 <span>🔥 Streak</span>
-                {/* <span className="text-cyan-400">{streak} Days</span> */}
+                <span className="text-cyan-400">{streak} Days</span>
               </div>
 
-{/*               
+             
                <div className="mt-4 flex flex-wrap gap-1.5">
                  {dates.map((item) => {
     const dateKey = item.toISOString().split("T")[0];
@@ -230,17 +194,21 @@ todos.forEach(todo => {
         } else if (data.percent > 0) {
             color = "bg-green-200";
         }
-    } */}
+    } 
 
-    {/* return (
+    { return (
         <div
             key={dateKey}
             className={`w-6 h-6 rounded-sm ${color}`}
             title={`${dateKey}`}
         />
     );
-})} */}
-              {/* </div> */}
+  }
+
+})}
+
+
+              </div> 
             </div>
           </div>
         </div>
