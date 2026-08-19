@@ -33,6 +33,19 @@ export default function HeroSection() {
     getTodoData();
   }, []);
 
+  // console.log("todos.................**********",todos)
+
+  console.log("TODOS FROM API:", todos);
+
+todos.forEach(todo => {
+  console.log(
+    todo.id,
+    todo.createdAt,
+    typeof todo.createdAt,
+    new Date(todo.createdAt).toString()
+  );
+});
+
 //   const todosByDate = todos.reduce((acc, todo) => {
 //   const date = new Date(todo.createdAt)
 //     .toISOString()
